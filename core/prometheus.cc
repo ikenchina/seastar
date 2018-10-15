@@ -672,14 +672,15 @@ public:
     }
 };
 
-
-
 future<> add_prometheus_routes(http_server& server, config ctx) {
     if (ctx.hostname == "") {
         ctx.hostname = metrics::impl::get_local_impl()->get_config().hostname;
     }
-    server._routes.put(GET, "/metrics", new metrics_handler(ctx));
-    server._routes.add(GET, url("/metrics").remainder("name"), new metrics_handler(ctx));
+    if (ctx.metric_path == "") {
+        ctx.metric_path = "/metrics"
+    }
+    server._routes.put(GET, ctx.metric_path.c_str(), new metrics_handler(ctx));
+    server._routes.add(GET, url(ctx.metric_path.c_str()).remainder("name"), new metrics_handler(ctx));
     return make_ready_future<>();
 }
 

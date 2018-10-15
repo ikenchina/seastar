@@ -34,6 +34,7 @@ struct config {
     sstring metric_help; //!< Default help message for the returned metrics
     sstring hostname; //!< name of the local host, if left empty, gethostname will be used
     sstring prefix = "seastar"; //!< a prefix that will be added to metric names
+    sstring metric_path; //!< http resource path on which to fetch metrics 
 };
 
 future<> start(httpd::http_server_control& http_server, config ctx);
